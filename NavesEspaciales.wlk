@@ -60,13 +60,25 @@ class NaveEspacial{
   method escapar()
 
   method avisar()
+
+  method estaDeRelajo(){
+    return self.estaTranquila() and self.tienePocaActividad()
+  }
+
+  method tienePocaActividad()
 }
 
 class NaveBaliza inherits NaveEspacial{
   var colorDeBaliza = "rojo"
+  var cambioDeColor = false
   
   method cambiarColorDeBaliza(colorNuevo){
     colorDeBaliza = colorNuevo
+    cambioDeColor = true
+  }
+
+  method cambioDeColor(){
+    return cambioDeColor
   }
 
   override method prepararViaje(){
@@ -86,12 +98,18 @@ class NaveBaliza inherits NaveEspacial{
   override method avisar(){
     self.cambiarColorDeBaliza("rojo")
   }
+
+  override method tienePocaActividad(){
+    return not cambioDeColor
+  }
 }
 
 class NaveDePasajeros inherits NaveEspacial{
   const cantPasajeros
   var cantRacionesComida = 0
   var cantRacionesBebida = 0
+  var cantRacionesComidaServidas = 0
+  var cantRacionesBebidaServidas = 0
 
   method cantRacionesComida(){
     return cantRacionesComida
@@ -117,6 +135,16 @@ class NaveDePasajeros inherits NaveEspacial{
     cantRacionesBebida -= cantRaciones
   }
 
+  method servirRacionesComida(cantRaciones){
+    cantRacionesComidaServidas += cantRaciones
+    cantRacionesComida -= cantRaciones
+  }
+
+  method servirRacionesBebida(cantRaciones){
+    cantRacionesBebidaServidas += cantRaciones
+    cantRacionesBebida -= cantRaciones
+  }
+
   override method prepararViaje(){
     super()
     self.cargarRacionesComida(4 * cantPasajeros)
@@ -129,8 +157,12 @@ class NaveDePasajeros inherits NaveEspacial{
   }
 
   override method avisar(){
-    self.descargarRacionesComida(1 * cantPasajeros)
-    self.descargarRacionesBebida(2 * cantPasajeros)
+    self.servirRacionesComida(1 * cantPasajeros)
+    self.servirRacionesBebida(2 * cantPasajeros)
+  }
+
+  override method tienePocaActividad(){
+    return cantRacionesComidaServidas < 50
   }
 }
 
