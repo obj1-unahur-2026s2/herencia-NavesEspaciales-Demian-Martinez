@@ -65,7 +65,9 @@ class NaveEspacial{
     return self.estaTranquila() and self.tienePocaActividad()
   }
 
-  method tienePocaActividad()
+  method tienePocaActividad(){
+    return false
+  }
 }
 
 class NaveBaliza inherits NaveEspacial{
