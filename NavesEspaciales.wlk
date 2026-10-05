@@ -51,6 +51,15 @@ class NaveEspacial{
   method estaTranquila(){
     return combustible >= 4000 and velocidad <= 12000
   }
+
+  method recibirAmenaza(){
+    self.escapar()
+    self.avisar()
+  }
+
+  method escapar()
+
+  method avisar()
 }
 
 class NaveBaliza inherits NaveEspacial{
@@ -68,6 +77,14 @@ class NaveBaliza inherits NaveEspacial{
 
   override method estaTranquila(){
     return super() and colorDeBaliza != "rojo"
+  }
+
+  override method escapar(){
+    self.irHaciaElSol()
+  }
+
+  override method avisar(){
+    self.cambiarColorDeBaliza("rojo")
   }
 }
 
@@ -105,6 +122,15 @@ class NaveDePasajeros inherits NaveEspacial{
     self.cargarRacionesComida(4 * cantPasajeros)
     self.cargarRacionesBebida(6 * cantPasajeros)
     self.acercarseUnPocoAlSol()
+  }
+
+  override method escapar(){
+    self.acelerar(velocidad * 2)
+  }
+
+  override method avisar(){
+    self.descargarRacionesComida(1 * cantPasajeros)
+    self.descargarRacionesBebida(2 * cantPasajeros)
   }
 }
 
@@ -172,6 +198,15 @@ class NaveDeCombate inherits NaveEspacial{
   override method estaTranquila(){
     return super() and not misilesDesplegados
   }
+
+  override method escapar(){
+    self.acercarseUnPocoAlSol()
+    self.acercarseUnPocoAlSol()
+  }
+
+  override method avisar(){
+    self.emitirMensaje("Amenaza recibida")
+  }
 }
 
 class NaveHospital inherits NaveDePasajeros{
@@ -184,10 +219,25 @@ class NaveHospital inherits NaveDePasajeros{
   override method estaTranquila(){
     return super() and not tienePreparadosLosQuirofanos
   }
+
+  method prepararQuirofanos(){
+    tienePreparadosLosQuirofanos = true
+  }
+
+  override method recibirAmenaza(){
+    super()
+    self.prepararQuirofanos()
+  }
 }
 
 class NaveDeCombateSigilosa inherits NaveDeCombate{
   override method estaTranquila(){
     return super() and not estaInvisible
+  }
+
+  override method escapar(){
+    super()
+    self.desplegarMisiles()
+    self.ponerseInvisible()
   }
 }
