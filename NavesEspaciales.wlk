@@ -7,11 +7,11 @@ class NaveEspacial{
   }
 
   method acelerar(cuanto){
-    velocidad = 0.max(cuanto) and 100000.min(cuanto)
+    velocidad = (velocidad + cuanto).max(0).min(100000)
   }
 
   method desacelerar(cuanto){
-    velocidad = 0.max(cuanto) and 100000.min(cuanto)
+    velocidad = (velocidad - cuanto).max(0).min(100000)
   }
 
   method irHaciaElSol(){
@@ -33,6 +33,8 @@ class NaveEspacial{
   method alejarseUnPocoAlSol(){
     direccion -= 1
   }
+
+  method prepararViaje()
 }
 
 class NaveBaliza inherits NaveEspacial{
@@ -40,6 +42,11 @@ class NaveBaliza inherits NaveEspacial{
   
   method cambiarColorDeBaliza(colorNuevo){
     colorDeBaliza = colorNuevo
+  }
+
+  override method prepararViaje(){
+    self.cambiarColorDeBaliza("verde")
+    self.ponerseParaleloAlSol()
   }
 }
 
@@ -70,6 +77,12 @@ class NaveDePasajeros inherits NaveEspacial{
 
   method descargarRacionesBebida(cantRaciones){
     cantRacionesBebida -= cantRaciones
+  }
+
+  override method prepararViaje(){
+    self.cargarRacionesComida(4 * cantPasajeros)
+    self.cargarRacionesBebida(6 * cantPasajeros)
+    self.acercarseUnPocoAlSol()
   }
 }
 
@@ -119,6 +132,17 @@ class NaveDeCombate inherits NaveEspacial{
   }
 
   method esEscueta(){
-    
+    return not mensajes.any({m => m.length() > 30})
+  }
+
+  method emitioMensaje(mensaje){
+    return mensajes.contains(mensaje)
+  }
+
+  override method prepararViaje(){
+    self.ponerseVisible()
+    self.replegarMisiles()
+    self.acelerar(15000)
+    self.emitirMensaje("Saliendo en misión")
   }
 }
