@@ -1,6 +1,7 @@
 class NaveEspacial{
   var velocidad = 10
   var direccion = 0
+  var combustible = 100
 
   method velocidad(){
     return velocidad
@@ -34,7 +35,18 @@ class NaveEspacial{
     direccion -= 1
   }
 
-  method prepararViaje()
+  method prepararViaje(){
+    self.cargarCombustible(30000)
+    self.acelerar(5000)
+  }
+
+  method cargarCombustible(cantCombustible){
+    combustible += cantCombustible
+  }
+
+  method descargarCombustible(cantCombustible){
+    combustible -= cantCombustible
+  }
 }
 
 class NaveBaliza inherits NaveEspacial{
@@ -45,6 +57,7 @@ class NaveBaliza inherits NaveEspacial{
   }
 
   override method prepararViaje(){
+    super()
     self.cambiarColorDeBaliza("verde")
     self.ponerseParaleloAlSol()
   }
@@ -80,6 +93,7 @@ class NaveDePasajeros inherits NaveEspacial{
   }
 
   override method prepararViaje(){
+    super()
     self.cargarRacionesComida(4 * cantPasajeros)
     self.cargarRacionesBebida(6 * cantPasajeros)
     self.acercarseUnPocoAlSol()
@@ -140,6 +154,7 @@ class NaveDeCombate inherits NaveEspacial{
   }
 
   override method prepararViaje(){
+    super()
     self.ponerseVisible()
     self.replegarMisiles()
     self.acelerar(15000)
